@@ -24,12 +24,29 @@ An automated system using:
      - Validates email presence in request body before subscribing  
    - Topic used: `arn:aws:sns:us-east-2:230193013910:MyEventAnnouncements`
 
+**Subscribe Flow Screenshots**
+  ![Connect Lambda to Subscribe Endpoint](assets/Connect_LAMBDA_to_subscribe_endpoint.png)
+  ![Lambda SNS Function Tested Successful](assets/lambda_sns_function_tested_successful.png)
+  ![Test Email for Event](assets/Test_email_for_event.png)
+  ![Testing REST API to Send Email](assets/Testing_REST_API_to_send_to_example@email.com.png)
+
 3. **Create Event Flow**:  
    - `/create-event` → API Gateway → Lambda  
    - The `createEventFunction`:
      - Appends new event details to the `events.json` file stored in S3 (`arn:aws:s3:::myevent-announcement-website-s3`)  
      - Notifies all SNS subscribers about the new event  
      - Function permissioned by `myeventcreationLAMBDAroll`
+
+### 📸 Architecture Flow Examples
+
+Here are key screenshots from the configuration and testing process:
+
+**Create Event Flow**
+![Create S3 Upload Files](assets/Create_S3_Upload_files.png)
+![Creating IAM Role for Lambda Permissions](assets/Creating_IAM_role_for_LAMBDA_permssions.png)
+![Event Function Role to Append New Events to S3](assets/Event_Funtion_Role_to_append_new_events_to_S3.png)
+![Creating Event Endpoint Using Lambda](assets/Creating_event_endpoint_using_LAMBDA.png)
+![EventFunction Lambda Shows Created Success](assets/EventFunctionLAMBDA_shows_created_success.png)
 
 ## Setup Steps
 
@@ -38,10 +55,19 @@ An automated system using:
    - Enabled static site hosting  
    - Used this bucket ARN: `arn:aws:s3:::myevent-announcement-website-s3`
 
+**Frontend Setup Screenshots**
+![Create Static Website Using Unique S3](assets/Create_static_website_using_unique_S3.png)
+![Creating Static Website with index.html](assets/Creating_static_website_with_index.html.png)
+
+
 2. **SNS Setup**  
    - Created topic: `MyEventAnnouncements`  
    - ARN: `arn:aws:sns:us-east-2:230193013910:MyEventAnnouncements`  
    - Enabled Lambda to publish to the topic
+
+**SNS Topic Setup**
+![Creating SES Topic](assets/Creating_SES_Topic.png)
+![Email Example](assets/Email_example.png)
 
 3. **Lambda Functions**  
    - `SubscribeToSNSFunctionlambda`: Manages email subscriptions  
@@ -54,6 +80,10 @@ An automated system using:
    - Deployed to stage `dev`:  
      - Subscribe: `https://gh7p4kplu.execute-api.us-east-2.amazonaws.com/dev/subscribe`  
      - Create Event: `https://gh7p4kplu.execute-api.us-east-2.amazonaws.com/dev/create-event`
+
+**SNS Topic Setup**
+![Creating SES Topic](assets/Creating_SES_Topic.png)
+![Email Example](assets/Email_example.png)
 
 5. **IAM Roles & Policies**  
    - Created role: `myeventcreationLAMBDAroll` for Lambda permissions  
@@ -84,6 +114,9 @@ During the build, I ran into a few issues and fixed them along the way:
 
 - **Endpoint Security**  
   I kept my real API endpoints out of the repo for safety. I tested everything fully, then removed the live links during cleanup.
+
+![Successful Event Website](assets/Successfull_EVENT-WEBSITE!!.png)
+
 
 ## Clean-Up
 

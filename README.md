@@ -19,16 +19,25 @@ An automated system using:
 2. **Subscribe Flow**:  
    - `/subscribe` → API Gateway → Lambda → SNS  
    - The `SubscribeToSNSFunctionlambda` handles email subscriptions:
-     - Uses `boto3.client('sns')` to interact with SNS  
-     - `sns_client.subscribe` adds emails to the topic  
-     - Validates email presence in request body before subscribing  
+
+
+![Lambda SNS Function Tested Successful](assets/LAMBDA_SNS_Function_tested_successful.png)
+     
+   - Uses `boto3.client('sns')` to interact with SNS  
+   - `sns_client.subscribe` adds emails to the topic  
+   - Validates email presence in request body before subscribing  
    - Topic used: `arn:aws:sns:us-east-2:230193013910:MyEventAnnouncements`
 
 **Subscribe Flow Screenshots**
-  ![Connect Lambda to Subscribe Endpoint](assets/Connect_LAMBDA_to_subscribe_endpoint.png)
-  ![Lambda SNS Function Tested Successful](assets/lambda_sns_function_tested_successful.png)
-  ![Test Email for Event](assets/Test_email_for_event.png)
-  ![Testing REST API to Send Email](assets/Testing_REST_API_to_send_to_example@email.com.png)
+  
+
+![Connect Lambda to Subscribe Endpoint](assets/Connect_LAMBDA_to_subscribe_endpoint.png)
+
+
+![Test Email for Event](assets/Test_email_for_event.png)
+
+
+![Testing REST API to Send Email](assets/Testing_REST_API_to_send_to_example@email.com.png)
 
 3. **Create Event Flow**:  
    - `/create-event` → API Gateway → Lambda  

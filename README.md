@@ -66,6 +66,25 @@ An automated system using:
 - Events successfully posted, stored in S3, and email notifications sent via SNS  
 - Responses were parsed and displayed correctly on the site
 
+## Troubleshooting
+
+During the build, I ran into a few issues and fixed them along the way:
+
+- **CORS Problems**  
+  My API Gateway wasn’t accepting requests from the frontend — fixed by turning on CORS for each endpoint and redeploying the API.
+
+- **Weird JSON Response from Lambda**  
+  Lambda gave me a response with a string inside the body. I had to use `JSON.parse()` twice in my JavaScript to get the actual message out.
+
+- **Site Looked All White After Changes**  
+  When I swapped in tutorial code, my styling disappeared. Turned out a broken URL and a missing CSS link caused a JavaScript error that broke the layout. Once I fixed the `fetch()` call and re-checked the CSS file, it worked again.
+
+- **Accidental Line Breaks**  
+  There was a sneaky line break in one of my `fetch()` calls — made the code crash silently. I used VS Code to spot it and fix it.
+
+- **Endpoint Security**  
+  I kept my real API endpoints out of the repo for safety. I tested everything fully, then removed the live links during cleanup.
+
 ## Clean-Up
 
 Once functionality was confirmed:

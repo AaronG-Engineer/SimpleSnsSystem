@@ -144,3 +144,21 @@ This project was built with a hands-on approach to reinforce real-world AWS arch
 **Temporary frontend was hosted at:**  
 `http://myevent-announcement-website-s3.s3-website.us-east-2.amazonaws.com`  
 This site has since been removed during cleanup for security and cost control.
+
+##  Tech Stack
+
+**Cloud & Infrastructure:**  
+AWS (Lambda, S3, SNS, API Gateway, IAM)
+
+**Frontend:**  
+HTML, CSS, JavaScript, Static Site Hosting via S3
+
+**Backend:**  
+Node.js (Lambda functions), REST API design via API Gateway, Event-driven architecture
+
+**Automation & Permissions:**  
+IAM Roles, Email notifications via SNS + SES
+
+**Deployment Approach:**  
+Serverless architecture, Infrastructure-as-Code style (manual in this repo, Terraform-ready)
+

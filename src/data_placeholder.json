@@ -1,13 +1,22 @@
 {
-  "note": "This placeholder simulates event data structure.",
-  "events": []
+  "note": "This placeholder simulates event subscription data for the static site.",
+  "events": [
+    {
+      "id": "e001",
+      "title": "Demo Launch",
+      "date": "2025-07-20",
+      "location": "Online",
+      "subscribers": ["user1@example.com", "user2@example.com"]
+    },
+    {
+      "id": "e002",
+      "title": "Placeholder Conference",
+      "date": "2025-08-01",
+      "location": "Kansas City",
+      "subscribers": []
+    }
+  ]
 }
-
-
-
-
-
-
 
 
 

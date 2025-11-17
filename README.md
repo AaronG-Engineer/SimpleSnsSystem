@@ -1,164 +1,116 @@
-# Simple SNS System
+# Event Notification System – Serverless Event Platform
 
-A lightweight cloud-powered event notification platform built with AWS. This project allows users to subscribe to event alerts, view upcoming events, and create new announcements — all through a static website backed by serverless infrastructure.
+![AWS](https://img.shields.io/badge/AWS-Serverless-orange) ![Lambda](https://img.shields.io/badge/Lambda-Python-blue) ![S3](https://img.shields.io/badge/S3-Storage-green)
 
-## AWS Event Notification Pipeline
+## 🎯 Purpose
+Cloud-powered event notification platform enabling users to subscribe to event alerts and create announcements through a static website backed by serverless AWS infrastructure.
 
-An automated system using:
+## 🏗️ Architecture
+- **Amazon S3** – Frontend hosting and event data storage
+- **Amazon SNS** – Email subscription management and notifications
+- **AWS Lambda** – Backend processing logic
+- **API Gateway** – RESTful endpoint management
+- **IAM** – Secure access control
 
-- Amazon S3 for frontend hosting and event data storage  
-- Amazon SNS for email subscriptions and notifications  
-- AWS Lambda for backend logic  
-- API Gateway for RESTful endpoints  
-- IAM Roles for secure access control
+## ⚙️ Technical Implementation
 
-## Architecture Overview
+### Architecture Flow
+```
+User → S3 Static Site → API Gateway → Lambda → SNS/S3 → Email Notification
+```
 
-1. **Frontend**: Static site hosted on S3 with HTML, CSS, and `events.json`
+### Subscribe Flow
+![Lambda SNS Function](assets/LAMBDA_SNS_Function_tested_successful.png)
 
-2. **Subscribe Flow**:  
-   - `/subscribe` → API Gateway → Lambda → SNS  
-   - The `SubscribeToSNSFunctionlambda` handles email subscriptions:
+**Process:**
+1. User submits email via `/subscribe` endpoint
+2. API Gateway routes to Lambda function
+3. Lambda validates email and adds to SNS topic
+4. SNS sends confirmation email
 
+![Connect Lambda](assets/Connect_LAMBDA_to_subscribe_endpoint.png)
+![Test Email](assets/Test_email_for_event.png)
+![REST API Test](assets/Testing_REST_API_to_send_to_example@email.com.png)
 
-![Lambda SNS Function Tested Successful](assets/LAMBDA_SNS_Function_tested_successful.png)
-     
-   - Uses `boto3.client('sns')` to interact with SNS  
-   - `sns_client.subscribe` adds emails to the topic  
-   - Validates email presence in request body before subscribing  
-   - Topic used: `arn:aws:sns:us-east-2:230193013910:MyEventAnnouncements`
+### Create Event Flow
+![S3 Upload](assets/Create_S3_Upload_files.png)
+![IAM Role](assets/Creating_IAM_role_for_LAMBDA_permssions.png)
+![Event Function Role](assets/Event_Funtion_Role_to_append_new_events_to_S3.png)
+![Event Endpoint](assets/Creating_event_endpoint_using_LAMBDA.png)
+![Success Status](assets/EventFunctionLAMBDA_shows_created_success.png)
 
-**Subscribe Flow Screenshots**
-  
+**Process:**
+1. User creates event via `/create-event` endpoint
+2. Lambda appends event to `events.json` in S3
+3. Lambda triggers SNS notification to all subscribers
+4. Frontend dynamically loads updated events
 
-![Connect Lambda to Subscribe Endpoint](assets/Connect_LAMBDA_to_subscribe_endpoint.png)
+### Frontend Deployment
+![Static Website S3](assets/Create_static_website_using_unique_S3.png)
+![Index HTML](assets/Creating_static_website_with_index.html.png)
 
-
-![Test Email for Event](assets/Test_email_for_event.png)
-
-
-![Testing REST API to Send Email](assets/Testing_REST_API_to_send_to_example@email.com.png)
-
-3. **Create Event Flow**:  
-   - `/create-event` → API Gateway → Lambda  
-   - The `createEventFunction`:
-     - Appends new event details to the `events.json` file stored in S3 (`arn:aws:s3:::myevent-announcement-website-s3`)  
-     - Notifies all SNS subscribers about the new event  
-     - Function permissioned by `myeventcreationLAMBDAroll`
-
-### 📸 Architecture Flow Examples
-
-Here are key screenshots from the configuration and testing process:
-
-**Create Event Flow**
-![Create S3 Upload Files](assets/Create_S3_Upload_files.png)
-![Creating IAM Role for Lambda Permissions](assets/Creating_IAM_role_for_LAMBDA_permssions.png)
-![Event Function Role to Append New Events to S3](assets/Event_Funtion_Role_to_append_new_events_to_S3.png)
-![Creating Event Endpoint Using Lambda](assets/Creating_event_endpoint_using_LAMBDA.png)
-![EventFunction Lambda Shows Created Success](assets/EventFunctionLAMBDA_shows_created_success.png)
-
-## Setup Steps
-
-1. **Frontend Hosting with S3**  
-   - Uploaded `index.html`, `styles.css`, and `events.json`  
-   - Enabled static site hosting  
-   - Used this bucket ARN: `arn:aws:s3:::myevent-announcement-website-s3`
-
-**Frontend Setup Screenshots**
-![Create Static Website Using Unique S3](assets/Create_static_website_using_unique_S3.png)
-![Creating Static Website with index.html](assets/Creating_static_website_with_index.html.png)
-
-
-2. **SNS Setup**  
-   - Created topic: `MyEventAnnouncements`  
-   - ARN: `arn:aws:sns:us-east-2:230193013910:MyEventAnnouncements`  
-   - Enabled Lambda to publish to the topic
-
-**SNS Topic Setup**
-![Creating SES Topic](assets/Creating_SES_Topic.png)
+### SNS Configuration
+![SNS Topic](assets/Creating_SES_Topic.png)
 ![Email Example](assets/Email_example.png)
 
-3. **Lambda Functions**  
-   - `SubscribeToSNSFunctionlambda`: Manages email subscriptions  
-   - `createEventFunction`: Updates events.json and triggers notifications
+## 🎯 Key Features
+- ✅ Serverless architecture with zero server management
+- ✅ Real-time event notifications via email
+- ✅ Static site hosting with dynamic content loading
+- ✅ RESTful API design with CORS support
+- ✅ IAM least-privilege security model
 
-4. **API Gateway Configuration**  
-   - Created REST API: `myEventManagementAPIrest`  
-   - Integrated and tested endpoints `/subscribe` and `/create-event`  
-   - Enabled CORS  
-   - Deployed to stage `dev`:  
-     - Subscribe: `https://gh7p4kplu.execute-api.us-east-2.amazonaws.com/dev/subscribe`  
-     - Create Event: `https://gh7p4kplu.execute-api.us-east-2.amazonaws.com/dev/create-event`
+## 📊 Technical Highlights
+- Event-driven architecture using SNS pub/sub pattern
+- S3 static site hosting with API Gateway integration
+- Lambda functions for decoupled business logic
+- CORS-enabled REST API for frontend communication
+- Secure credential management via IAM roles
 
-**SNS Topic Setup**
-![Creating SES Topic](assets/Creating_SES_Topic.png)
-![Email Example](assets/Email_example.png)
+## 🔧 API Endpoints
 
-5. **IAM Roles & Policies**  
-   - Created role: `myeventcreationLAMBDAroll` for Lambda permissions  
-   - Roles assigned to handle S3 access and SNS publishing securely
+### Subscribe Endpoint
+```javascript
+POST /subscribe
+{
+  "email": "user@example.com"
+}
+```
 
-## Testing
+### Create Event Endpoint
+```javascript
+POST /create-event
+{
+  "title": "Event Name",
+  "date": "2024-01-01",
+  "description": "Event details"
+}
+```
 
-- Manually tested Lambda and API Gateway connections  
-- Verified CORS handling and frontend communication  
-- Events successfully posted, stored in S3, and email notifications sent via SNS  
-- Responses were parsed and displayed correctly on the site
+## 🔒 Security Implementation
+- IAM roles with least-privilege access
+- API Gateway authorization
+- CORS configuration for cross-origin requests
+- SNS subscription confirmation workflow
+- Secure credential management
 
-## Troubleshooting
+![Successful Deployment](assets/Successfull_EVENT-WEBSITE!!.png)
 
-During the build, I ran into a few issues and fixed them along the way:
+## 📈 Use Cases
+- Event management platforms
+- Community announcement systems
+- Newsletter subscription services
+- Real-time notification systems
+- Marketing campaign platforms
 
-- **CORS Problems**  
-  My API Gateway wasn’t accepting requests from the frontend — fixed by turning on CORS for each endpoint and redeploying the API.
+## 🎓 Architecture Decisions
+- **S3 for hosting**: Cost-effective static site delivery
+- **SNS for notifications**: Scalable pub/sub messaging
+- **Lambda for logic**: Pay-per-execution serverless compute
+- **API Gateway for APIs**: Managed REST endpoint infrastructure
 
-- **Weird JSON Response from Lambda**  
-  Lambda gave me a response with a string inside the body. I had to use `JSON.parse()` twice in my JavaScript to get the actual message out.
+---
 
-- **Site Looked All White After Changes**  
-  When I swapped in tutorial code, my styling disappeared. Turned out a broken URL and a missing CSS link caused a JavaScript error that broke the layout. Once I fixed the `fetch()` call and re-checked the CSS file, it worked again.
+**Built with:** AWS Lambda | S3 | SNS | API Gateway | IAM | Python
 
-- **Accidental Line Breaks**  
-  There was a sneaky line break in one of my `fetch()` calls — made the code crash silently. I used VS Code to spot it and fix it.
-
-- **Endpoint Security**  
-  I kept my real API endpoints out of the repo for safety. I tested everything fully, then removed the live links during cleanup.
-
-![Successful Event Website](assets/Successfull_EVENT-WEBSITE!!.png)
-
-
-## Clean-Up
-
-Once functionality was confirmed:
-
-- Deleted S3 bucket  
-- Deleted Lambda functions: `SubscribeToSNSFunctionlambda` and `createEventFunction`  
-- Removed API Gateway endpoints  
-- Deleted SNS topic and subscriptions  
-- Detached and deleted IAM roles
-
-## Notes
-
-This project was built with a hands-on approach to reinforce real-world AWS architecture. Each component was tested individually before full integration. Permissions followed least-privilege principles, and CORS was validated during deployment.
-
-**Temporary frontend was hosted at:**  
-`http://myevent-announcement-website-s3.s3-website.us-east-2.amazonaws.com`  
-This site has since been removed during cleanup for security and cost control.
-
-##  Tech Stack
-
-**Cloud & Infrastructure:**  
-AWS (Lambda, S3, SNS, API Gateway, IAM)
-
-**Frontend:**  
-HTML, CSS, JavaScript, Static Site Hosting via S3
-
-**Backend:**  
-Node.js (Lambda functions), REST API design via API Gateway, Event-driven architecture
-
-**Automation & Permissions:**  
-IAM Roles, Email notifications via SNS + SES
-
-**Deployment Approach:**  
-Serverless architecture, Infrastructure-as-Code style (manual in this repo, Terraform-ready)
-
+**Tags:** `aws` `serverless` `lambda` `s3` `sns` `api-gateway` `event-driven` `notifications`
